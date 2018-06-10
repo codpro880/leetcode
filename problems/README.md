@@ -1,0 +1,1 @@
+My solutions to leetcode problems, in both Python and C++. I typically try to write them on paper or whiteboard first...because you never know when you'll have to whiteboard at an interview.
