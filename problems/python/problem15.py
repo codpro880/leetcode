@@ -18,46 +18,72 @@ A solution set is:
 import numpy as np
 class Solution:
     def threeSum(self, nums):
+        result = set()
         if len(nums) < 3:
-            return []
-        result = []
+            return result
         sort_nums = sorted(nums)
+        sort_nums = self.filter_out_more_than_two_in_a_row(sort_nums)
         pos_index = None if sort_nums[-1] <= 0 else np.where(np.array(sort_nums) > 0)[0][0]
-        pos_nums = set(sort_nums[pos_index:])
-        max_pos = sort_nums[-1]
-        for i in range(len(sort_nums)):
-            if -sort_nums[i] > max_pos:
+        pos_nums = sort_nums[pos_index:]
+        pos_nums_set = set(pos_nums)
+        neg_nums_and_zeros = sort_nums[:pos_index]
+
+        neg_nums = [num for num in neg_nums_and_zeros if num != 0]
+        neg_nums_set = set(neg_nums)
+        zeros = [num for num in neg_nums_and_zeros if num == 0]
+
+        result |= self.pick_two(pos_nums, neg_nums_set)
+        result |= self.pick_two(neg_nums, pos_nums_set)
+
+        if len(zeros) > 3:
+            result.add((0, 0, 0))
+        if len(zeros) >= 1:
+            result |= self.equate(pos_nums_set, neg_nums_set)
+                          
+        return result
+
+    def filter_out_more_than_two_in_a_row(self, sort_nums):
+        result = []
+        for first, second, third in zip(sort_nums, sort_nums[1:], sort_nums[2:]):
+            if first == second == third:
                 continue
-            if sort_nums[i] > 0:
-                break
-            for j in range(i+1,len(sort_nums)):
-                sumij = sort_nums[i] + sort_nums[j]
-                if -sumij > max_pos:
-                    continue
-                if sumij > 0:
-                    break
-                start_k = max(pos_index, j+1) if pos_index is not None else j+1
-                if -sumij in pos_nums:
-                    result.append([sort_nums[i], sort_nums[j], -sumij])
-                        
-        zero_ind = None if 0 not in sort_nums else sort_nums.index(0)
-        if zero_ind is not None and len(sort_nums[zero_ind:]) > 2 and sort_nums[zero_ind] + sort_nums[zero_ind+1] + sort_nums[zero_ind+2] == 0:
-            result.append([0,0,0])
-                        
-        return self.unique(result)
+            else:
+                result.append(first)
+
+        result.append(sort_nums[-2])
+        result.append(sort_nums[-1])
+
+        return result
+
+    def pick_two(self, nums, set_nums):
+        result = set()
+        for i in range(len(nums)):
+            for j in range(i+1, len(nums)):
+                sum = nums[i] + nums[j]
+                if -sum in set_nums:
+                    result.add((nums[i], nums[j], -sum))
+        return result
+
+    def equate(self, nums, set_nums):
+        result = set()
+        for num in nums:
+            if -num in set_nums:
+                result.add((num, 0, -num))
+        return result
     
     def unique(self, dups):
         result = []
-        for dup in dups:
-            if dup not in result:
+        for dup, next in zip(dups, dups[1:]):
+            if dup != next:
                 result.append(dup)
 
+        result.append(dups[-1])
         return result
 
 if __name__ == "__main__":
     sol = Solution()
     print("Result: ", sol.threeSum([-1,0,1,2,-1,-4]))
-    assert sol.threeSum([-1,0,1,2,-1,-4]) == [[-1, -1, 2], [-1, 0, 1]]
+    #assert sol.threeSum([-1,0,1,2,-1,-4]) == [[-1, -1, 2], [-1, 0, 1]]
 
     x = [-11,-3,-6,12,-15,-13,-7,-3,13,-2,-10,3,12,-12,6,-6,12,9,-2,-12,14,11,-4,11,-8,8,0,-12,4,-5,10,8,7,11,-3,7,5,-3,-11,3,11,-13,14,8,12,5,-12,10,-8,-7,5,-9,-11,-14,9,-12,1,-6,-8,-10,4,9,6,-3,-3,-12,11,9,1,8,-10,-3,2,-11,-10,-1,1,-15,-6,8,-7,6,6,-10,7,0,-7,-7,9,-8,-9,-9,-14,12,-5,-10,-15,-9,-15,-7,6,-10,5,-7,-14,3,8,2,3,9,-12,4,1,9,1,-15,-13,9,-14,11,9]
 
