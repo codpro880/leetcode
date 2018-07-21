@@ -43,8 +43,41 @@ class Solution(object):
             print(cur.val)
             cur = cur.next
 
+
+class SolutionRecursive(object):
+    def reverseList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head:
+            return head
+        else:
+            return self.rev_list_helper(head, None)
+
+    def rev_list_helper(self, head, prev):
+        if head is None:
+            return head
+        else:
+            if head.next is None:
+                head.next = prev
+                return head
+
+            single_head = ListNode(head.val)
+            single_head.next = prev
+            rest = self.rev_list_helper(head.next, single_head)
+                
+            return rest
+        
+
+    def printListNode(self, ln):
+        cur = ln
+        while cur:
+            print(cur.val)
+            cur = cur.next
+
 if __name__ == "__main__":
-    sol = Solution()
+    sol = SolutionRecursive()
 
     one = ListNode(1)
     two = ListNode(2)
