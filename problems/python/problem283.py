@@ -19,13 +19,14 @@ class Solution(object):
         :rtype: void Do not return anything, modify nums in-place instead.
         """
         if self.get_first_zero_ind(nums) == -1:
-            return nums
+            return
         else:
-            for i in range(len(nums)):
+            first_zero_ind = self.get_first_zero_ind(nums)
+            for i in range(first_zero_ind, len(nums)):
                 if nums[i] != 0:
                     first_zero_ind = self.get_first_zero_ind(nums)
                     nums[i], nums[first_zero_ind] = nums[first_zero_ind], nums[i]
-        return nums
+
 
     def get_first_zero_ind(self, arr):
         for i in range(len(arr)):
@@ -42,3 +43,11 @@ if __name__ == "__main__":
     input2 = [1]
     sol.moveZeroes(input2)
     print(input2)
+
+    input3 = [49, 0, 21, 0, 0, 0, 2999, 123, 456, 0, 0]
+    sol.moveZeroes(input3)
+    assert input3 == [49, 21, 2999, 123, 456, 0, 0, 0, 0, 0, 0]
+
+    input4 = [4,2,4,0,0,3,0,5,1,0]
+    sol.moveZeroes(input4)
+    assert input4 == [4,2,4,3,5,1,0, 0, 0, 0]
