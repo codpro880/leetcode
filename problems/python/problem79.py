@@ -21,13 +21,15 @@ class Solution(object):
         return self.has_word(nodes, word)
     
     def has_word(self, nodes, word):
+        result = []
         first_char = word[0]
         for row in nodes:
             for node in row:
                 if node.val == first_char:
                     # Do DFS to see if we can link the rest of the chars
                     self.reset_visited(nodes)
-                    return self.search(node, word)
+                    result.append(self.search(node, word))
+        return any(result)
                 
     def reset_visited(self, nodes):
         for row in nodes:

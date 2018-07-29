@@ -13,6 +13,7 @@ You may not modify the values in the list's nodes, only nodes itself may be chan
 #include <iostream>
 using namespace std;
 //#define NULL 0
+// Typically would need a destructor here, but this is just practice problem and so we'll just leak memory for now
 struct ListNode {
     int val;
     ListNode *next;
