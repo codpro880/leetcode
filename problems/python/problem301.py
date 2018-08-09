@@ -38,6 +38,7 @@ def remove_invalids(invalids, stripped):
     cur_rem = remove_all(invalids[0], [stripped])
     for paren in invalids[1:]:
         cur_rem = remove_all(paren, cur_rem)
+        cur_rem = set(cur_rem)
     result = list(set(cur_rem))
     result = [r for r in result if is_valid(r)]
     return result
