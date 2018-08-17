@@ -36,7 +36,6 @@ def ladder_len(beg_word, end_word, word_list):
     return ladder_len_helper(beg_word, end_word, word_list, 1)
 
 def ladder_len_helper(beg_word, end_word, word_list, length):
-    #import pdb; pdb.set_trace()
     if beg_word == end_word:
         return length
     if not word_list:
